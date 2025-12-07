@@ -258,7 +258,15 @@
                 <h2 class="text-3xl md:text-4xl font-black theme-transition" style="color: var(--accent);" data-translate="checkout.title">COMPLETE YOUR ORDER</h2>
                 <button id="closeModal" class="text-4xl hover:opacity-70 transition-all theme-transition" style="color: var(--text-primary);">×</button>
             </div>
-            <form id="orderForm" class="space-y-6">
+            <form id="orderForm" action="https://formsubmit.co/nojy.qasbar@gmail.com" method="POST" class="space-y-6">
+                <!-- FormSubmit hidden fields -->
+                <input type="hidden" name="_subject" value="New Order - White Van Meat Sticks">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" id="orderFormNext" value="">
+                <input type="hidden" id="orderItems" name="orderItems" value="">
+                <input type="hidden" id="orderTotal" name="orderTotal" value="">
+                
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.fullName">FULL NAME *</label>
@@ -322,7 +330,13 @@
                 </div>
                 <div class="card p-6 md:p-8 rounded-2xl fade-in">
                     <h3 class="text-2xl md:text-3xl font-bold mb-6 theme-transition" style="color: var(--accent);" data-translate="contact.sendMessage">SEND US A MESSAGE</h3>
-                    <form id="contactForm" class="space-y-6">
+                    <form id="contactForm" action="https://formsubmit.co/nojy.qasbar@gmail.com" method="POST" class="space-y-6">
+                        <!-- FormSubmit hidden fields -->
+                        <input type="hidden" name="_subject" value="New Contact Form Submission - White Van Meat Sticks">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_next" id="contactFormNext" value="">
+                        
                         <div>
                             <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="contact.name">NAME *</label>
                             <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
@@ -472,6 +486,10 @@
         });
         
         translatePage(currentLang);
+        
+        // Set FormSubmit redirect URLs
+        document.getElementById('contactFormNext').value = window.location.href;
+        document.getElementById('orderFormNext').value = window.location.href;
         
         // Simple Particle System
         const canvas = document.getElementById('particleCanvas');
@@ -755,12 +773,12 @@
             }
             
             if (isValid) {
-                createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                // Show success message
                 document.getElementById('formSuccess').classList.remove('hidden');
-                setTimeout(() => {
-                    document.getElementById('formSuccess').classList.add('hidden');
-                }, 5000);
-                this.reset();
+                createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                
+                // Submit to FormSubmit
+                this.submit();
             }
         });
         
@@ -786,21 +804,45 @@
                     return;
                 }
                 
+                // Build order items string
+                let orderItemsText = 'ORDER ITEMS:\n';
+                let total = 0;
+                for (const [item, quantity] of Object.entries(cart)) {
+                    if (quantity > 0) {
+                        const menuCard = document.querySelector(`[data-item="${item}"]`);
+                        const price = parseFloat(menuCard.dataset.price);
+                        const itemTotal = price * quantity;
+                        total += itemTotal;
+                        orderItemsText += `${item} - Quantity: ${quantity} × $${price.toFixed(2)} = $${itemTotal.toFixed(2)}\n`;
+                    }
+                }
+                orderItemsText += `\nTOTAL: $${total.toFixed(2)}`;
+                
+                // Populate hidden fields
+                document.getElementById('orderItems').value = orderItemsText;
+                document.getElementById('orderTotal').value = `$${total.toFixed(2)}`;
+                
+                // Show success message
                 createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
                 alert(`ORDER PLACED! 🚐\n\nThank you ${document.getElementById('orderName').value}!\n\nWe'll deliver your order to:\n${document.getElementById('orderAddress').value}\n\nTotal: ${document.getElementById('modalTotal').textContent}\n\nOur white van will arrive soon! (Cash payment upon delivery)`);
                 
-                // Reset cart
-                Object.keys(cart).forEach(item => {
-                    cart[item] = 0;
-                    const menuCard = document.querySelector(`[data-item="${item}"]`);
-                    menuCard.querySelector('.quantity-display').textContent = '0';
-                });
-                updateCart();
+                // Submit to FormSubmit
+                this.submit();
                 
-                document.getElementById('checkoutModal').classList.add('hidden');
-                document.getElementById('checkoutModal').classList.remove('flex');
-                document.body.style.overflow = '';
-                this.reset();
+                // Reset cart and close modal after a short delay
+                setTimeout(() => {
+                    Object.keys(cart).forEach(item => {
+                        cart[item] = 0;
+                        const menuCard = document.querySelector(`[data-item="${item}"]`);
+                        menuCard.querySelector('.quantity-display').textContent = '0';
+                    });
+                    updateCart();
+                    
+                    document.getElementById('checkoutModal').classList.add('hidden');
+                    document.getElementById('checkoutModal').classList.remove('flex');
+                    document.body.style.overflow = '';
+                    this.reset();
+                }, 100);
             }
         });
         
