@@ -1,1 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHITE VAN MEAT STICKS - SUSPICIOUSLY DELICIOUS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Light theme colors */
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-accent: #fef3c7;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --border: #e5e7eb;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="dark"] {
+            /* Dark theme colors */
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-accent: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --accent: #fbbf24;
+            --accent-hover: #f59e0b;
+            --border: #374151;
+            --card-bg: rgba(31, 41, 55, 0.9);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .float { animation: float 3s ease-in-out infinite; }
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        
+        .particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        .theme-transition {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+        
+        [dir="rtl"] {
+            direction: rtl;
+        }
+    </style>
+</head>
+<body class="min-h-screen overflow-x-hidden theme-transition">
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
 
+    <!-- Header -->
+    <header class="sticky top-0 z-50 theme-transition" style="background-color: var(--bg-secondary); border-bottom: 2px solid var(--border);">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl md:text-3xl font-bold theme-transition" style="color: var(--accent);" id="logo" data-translate="logo">🚐 WHITE VAN MEAT STICKS 🚐</div>
+            <div class="flex items-center gap-4">
+                <ul class="flex gap-4 md:gap-6 text-sm md:text-lg theme-transition" style="color: var(--text-primary);">
+                    <li><a href="#home" class="hover:opacity-70 transition-all" data-translate="nav.home">HOME</a></li>
+                    <li><a href="#about" class="hover:opacity-70 transition-all" data-translate="nav.about">ABOUT</a></li>
+                    <li><a href="#menu" class="hover:opacity-70 transition-all" data-translate="nav.menu">MENU</a></li>
+                    <li><a href="#contact" class="hover:opacity-70 transition-all" data-translate="nav.contact">CONTACT</a></li>
+                </ul>
+                <div class="flex items-center gap-2">
+                    <select id="languageSelect" class="px-3 py-2 rounded-lg theme-transition" style="background-color: var(--bg-accent); color: var(--text-primary); border: 1px solid var(--border);">
+                        <option value="en">🇺🇸 EN</option>
+                        <option value="fr">🇫🇷 FR</option>
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="ar">🇸🇦 AR</option>
+                    </select>
+                    <button id="themeToggle" class="p-2 rounded-lg theme-transition hover:opacity-70" style="background-color: var(--bg-accent); color: var(--text-primary);" title="Toggle theme">
+                        <span id="themeIcon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden theme-transition" style="background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-accent) 100%);">
+        <div class="text-center z-10 relative fade-in">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 float theme-transition" style="color: var(--text-primary);" id="heroTitle" data-translate="hero.title">
+                PREMIUM MEAT STICKS
+            </h1>
+            <p class="text-2xl md:text-4xl mb-8 theme-transition" style="color: var(--accent);" id="heroSubtitle" data-translate="hero.subtitle">
+                FRESH FROM THE VAN
+            </p>
+            <button id="orderButton" class="btn-primary px-8 py-4 text-xl font-bold rounded-full relative overflow-hidden" data-translate="hero.orderBtn">
+                ORDER NOW
+            </button>
+            <div class="mt-8 text-6xl float inline-block" id="vanEmoji">🚐</div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 theme-transition" style="background-color: var(--bg-secondary);">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-black text-center mb-12 theme-transition fade-in" style="color: var(--accent);" data-translate="about.title">ABOUT US</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-lg md:text-xl space-y-6 theme-transition fade-in" style="color: var(--text-primary);">
+                    <p data-translate="about.p1">Welcome to White Van Meat Sticks! We're a <span class="font-bold" style="color: var(--accent);">mobile</span> meat stick operation bringing premium quality, handcrafted meat sticks directly to your neighborhood.</p>
+                    <p data-translate="about.p2">Our white van roams the streets, bringing you the <span class="font-bold" style="color: var(--accent);">freshest</span>, most flavorful meat sticks you've ever tasted. Made with care, seasoned to perfection, and served with a smile.</p>
+                    <p data-translate="about.p3">Look for our distinctive white van and flag us down for a taste of something <span class="font-bold" style="color: var(--accent);">special</span>. We're always on the move, bringing quality meat sticks to communities everywhere!</p>
+                </div>
+                <div class="text-center fade-in">
+                    <div class="text-8xl md:text-9xl float inline-block" id="vanIcon">🚐</div>
+                    <div class="mt-4 text-4xl space-x-4">
+                        <span class="inline-block float" style="animation-delay: 0.1s">🥩</span>
+                        <span class="inline-block float" style="animation-delay: 0.2s">🍖</span>
+                        <span class="inline-block float" style="animation-delay: 0.3s">🌭</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-20 theme-transition" style="background-color: var(--bg-primary);">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-black text-center mb-12 theme-transition fade-in" style="color: var(--accent);" data-translate="menu.title">OUR MENU</h2>
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="menu-card card p-6 md:p-8 rounded-2xl transition-all hover:scale-105 relative overflow-hidden fade-in" data-item="Classic Beef" data-price="3.50" data-emoji="🥩">
+                    <div class="text-6xl md:text-8xl text-center mb-4 float">🥩</div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="menu.classicBeef.title">CLASSIC BEEF</h3>
+                    <p class="mb-6 text-center theme-transition" style="color: var(--text-secondary);" data-translate="menu.classicBeef.desc">Traditional beef meat stick with our signature seasoning blend</p>
+                    <div class="text-3xl md:text-4xl font-black text-center mb-4 theme-transition" style="color: var(--accent);">$3.50</div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="decrease">-</button>
+                        <span class="quantity-display text-2xl font-bold w-12 text-center theme-transition" style="color: var(--text-primary);">0</span>
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="increase">+</button>
+                    </div>
+                </div>
+                <div class="menu-card card p-6 md:p-8 rounded-2xl transition-all hover:scale-105 relative overflow-hidden fade-in" data-item="Spicy Jalapeño" data-price="4.00" data-emoji="🍖">
+                    <div class="text-6xl md:text-8xl text-center mb-4 float">🍖</div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="menu.spicyJalapeno.title">SPICY JALAPEÑO</h3>
+                    <p class="mb-6 text-center theme-transition" style="color: var(--text-secondary);" data-translate="menu.spicyJalapeno.desc">Beef stick with a kick of jalapeño and special spices</p>
+                    <div class="text-3xl md:text-4xl font-black text-center mb-4 theme-transition" style="color: var(--accent);">$4.00</div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="decrease">-</button>
+                        <span class="quantity-display text-2xl font-bold w-12 text-center theme-transition" style="color: var(--text-primary);">0</span>
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="increase">+</button>
+                    </div>
+                </div>
+                <div class="menu-card card p-6 md:p-8 rounded-2xl transition-all hover:scale-105 relative overflow-hidden fade-in" data-item="Hot & Spicy" data-price="4.00" data-emoji="🌶️">
+                    <div class="text-6xl md:text-8xl text-center mb-4 float">🌶️</div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="menu.hotSpicy.title">HOT & SPICY</h3>
+                    <p class="mb-6 text-center theme-transition" style="color: var(--text-secondary);" data-translate="menu.hotSpicy.desc">For those who like it extra hot - not for the faint of heart!</p>
+                    <div class="text-3xl md:text-4xl font-black text-center mb-4 theme-transition" style="color: var(--accent);">$4.00</div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="decrease">-</button>
+                        <span class="quantity-display text-2xl font-bold w-12 text-center theme-transition" style="color: var(--text-primary);">0</span>
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="increase">+</button>
+                    </div>
+                </div>
+                <div class="menu-card card p-6 md:p-8 rounded-2xl transition-all hover:scale-105 relative overflow-hidden fade-in" data-item="Cheese Stuffed" data-price="4.50" data-emoji="🧀">
+                    <div class="text-6xl md:text-8xl text-center mb-4 float">🧀</div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="menu.cheeseStuffed.title">CHEESE STUFFED</h3>
+                    <p class="mb-6 text-center theme-transition" style="color: var(--text-secondary);" data-translate="menu.cheeseStuffed.desc">Beef stick with melted cheese center - a customer favorite!</p>
+                    <div class="text-3xl md:text-4xl font-black text-center mb-4 theme-transition" style="color: var(--accent);">$4.50</div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="decrease">-</button>
+                        <span class="quantity-display text-2xl font-bold w-12 text-center theme-transition" style="color: var(--text-primary);">0</span>
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="increase">+</button>
+                    </div>
+                </div>
+                <div class="menu-card card p-6 md:p-8 rounded-2xl transition-all hover:scale-105 relative overflow-hidden fade-in" data-item="Honey BBQ" data-price="4.00" data-emoji="🍯">
+                    <div class="text-6xl md:text-8xl text-center mb-4 float">🍯</div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="menu.honeyBBQ.title">HONEY BBQ</h3>
+                    <p class="mb-6 text-center theme-transition" style="color: var(--text-secondary);" data-translate="menu.honeyBBQ.desc">Sweet and savory with our special honey BBQ glaze</p>
+                    <div class="text-3xl md:text-4xl font-black text-center mb-4 theme-transition" style="color: var(--accent);">$4.00</div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="decrease">-</button>
+                        <span class="quantity-display text-2xl font-bold w-12 text-center theme-transition" style="color: var(--text-primary);">0</span>
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="increase">+</button>
+                    </div>
+                </div>
+                <div class="menu-card card p-6 md:p-8 rounded-2xl transition-all hover:scale-105 relative overflow-hidden fade-in" data-item="Family Pack" data-price="35.00" data-emoji="📦">
+                    <div class="text-6xl md:text-8xl text-center mb-4 float">📦</div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="menu.familyPack.title">FAMILY PACK</h3>
+                    <p class="mb-6 text-center theme-transition" style="color: var(--text-secondary);" data-translate="menu.familyPack.desc">10 assorted meat sticks - perfect for sharing!</p>
+                    <div class="text-3xl md:text-4xl font-black text-center mb-4 theme-transition" style="color: var(--accent);">$35.00</div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="decrease">-</button>
+                        <span class="quantity-display text-2xl font-bold w-12 text-center theme-transition" style="color: var(--text-primary);">0</span>
+                        <button class="quantity-btn btn-primary px-4 py-2 rounded-lg font-bold transition-all" data-action="increase">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Summary Cart -->
+            <div id="orderCart" class="card p-6 md:p-8 max-w-2xl mx-auto sticky bottom-4 z-40 hidden fade-in">
+                <h3 class="text-2xl md:text-3xl font-bold mb-4 text-center theme-transition" style="color: var(--accent);" data-translate="cart.title">YOUR ORDER 🛒</h3>
+                <div id="cartItems" class="space-y-3 mb-4 max-h-60 overflow-y-auto"></div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl md:text-2xl font-bold theme-transition" style="color: var(--text-primary);" data-translate="cart.total">TOTAL:</span>
+                    <span id="cartTotal" class="text-2xl md:text-3xl font-black theme-transition" style="color: var(--accent);">$0.00</span>
+                </div>
+                <button id="checkoutBtn" class="w-full btn-primary py-4 text-lg md:text-xl font-bold rounded-lg transition-all">
+                    <span data-translate="cart.checkout">CHECKOUT</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center theme-transition" style="background-color: rgba(0, 0, 0, 0.7);">
+        <div class="card p-6 md:p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl md:text-4xl font-black theme-transition" style="color: var(--accent);" data-translate="checkout.title">COMPLETE YOUR ORDER</h2>
+                <button id="closeModal" class="text-4xl hover:opacity-70 transition-all theme-transition" style="color: var(--text-primary);">×</button>
+            </div>
+            <form id="orderForm" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.fullName">FULL NAME *</label>
+                        <input type="text" id="orderName" name="orderName" required class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                        <span class="error-message text-red-500 text-sm hidden"></span>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.phone">PHONE NUMBER *</label>
+                        <input type="tel" id="orderPhone" name="orderPhone" required pattern="[0-9]{10,}" class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                        <span class="error-message text-red-500 text-sm hidden"></span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.address">DELIVERY ADDRESS *</label>
+                    <input type="text" id="orderAddress" name="orderAddress" required class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                    <span class="error-message text-red-500 text-sm hidden"></span>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.city">CITY *</label>
+                        <input type="text" id="orderCity" name="orderCity" required class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                        <span class="error-message text-red-500 text-sm hidden"></span>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.zip">ZIP CODE *</label>
+                        <input type="text" id="orderZip" name="orderZip" required pattern="[0-9]{5}" class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                        <span class="error-message text-red-500 text-sm hidden"></span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.instructions">SPECIAL INSTRUCTIONS</label>
+                    <textarea id="orderInstructions" name="orderInstructions" data-translate-placeholder="checkout.instructionsPlaceholder" class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none min-h-[100px] transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);"></textarea>
+                </div>
+                <div class="p-4 rounded-lg theme-transition" style="background-color: var(--bg-accent);">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xl font-bold theme-transition" style="color: var(--text-primary);" data-translate="checkout.orderTotal">ORDER TOTAL:</span>
+                        <span id="modalTotal" class="text-2xl md:text-3xl font-black theme-transition" style="color: var(--accent);">$0.00</span>
+                    </div>
+                    <p class="text-sm theme-transition" style="color: var(--text-secondary);" data-translate="checkout.cashNote">💰 Cash payment upon delivery</p>
+                </div>
+                <button type="submit" class="w-full btn-primary py-4 text-lg md:text-xl font-bold rounded-lg transition-all">
+                    <span data-translate="checkout.placeOrder">PLACE ORDER 🚐</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 theme-transition" style="background-color: var(--bg-secondary);">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-black text-center mb-12 theme-transition fade-in" style="color: var(--accent);" data-translate="contact.title">FIND US</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="space-y-6 text-lg md:text-xl theme-transition fade-in" style="color: var(--text-primary);">
+                    <h3 class="text-3xl md:text-4xl font-bold mb-6 theme-transition" style="color: var(--accent);" data-translate="contact.locationInfo">LOCATION INFO</h3>
+                    <p class="flex items-center gap-3 hover:translate-x-2 transition-transform" data-translate="contact.mobile">📍 We're mobile! Look for our white van in your area</p>
+                    <p class="flex items-center gap-3 hover:translate-x-2 transition-transform"><span data-translate="contact.phone">📞 Call or Text:</span> <span class="font-bold theme-transition" style="color: var(--accent);">(555) MEAT-123</span></p>
+                    <p class="flex items-center gap-3 hover:translate-x-2 transition-transform"><span data-translate="contact.email">📧 Email:</span> <span class="font-bold theme-transition" style="color: var(--accent);">meatsticks@whitevan.com</span></p>
+                    <p class="flex items-center gap-3 hover:translate-x-2 transition-transform"><span data-translate="contact.hours">🕐 Hours:</span> <span class="font-bold theme-transition" style="color: var(--accent);">Mon-Sat 10AM - 8PM</span></p>
+                    <p class="flex items-center gap-3 hover:translate-x-2 transition-transform" data-translate="contact.social">📱 Follow us on social media for daily location updates!</p>
+                    <p class="text-xl md:text-2xl font-bold mt-8 italic theme-transition pulse" style="color: var(--accent);" data-translate="contact.quote">"If you see the white van, flag us down! We're always happy to serve fresh meat sticks."</p>
+                </div>
+                <div class="card p-6 md:p-8 rounded-2xl fade-in">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-6 theme-transition" style="color: var(--accent);" data-translate="contact.sendMessage">SEND US A MESSAGE</h3>
+                    <form id="contactForm" class="space-y-6">
+                        <div>
+                            <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="contact.name">NAME *</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                            <span class="error-message text-red-500 text-sm hidden"></span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="contact.phoneLabel">PHONE *</label>
+                            <input type="tel" id="phone" name="phone" required pattern="[0-9]{10,}" class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                            <span class="error-message text-red-500 text-sm hidden"></span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="contact.emailLabel">EMAIL</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);">
+                        </div>
+                        <div>
+                            <label class="block mb-2 font-bold theme-transition" style="color: var(--text-primary);" data-translate="contact.message">MESSAGE *</label>
+                            <textarea id="message" name="message" required data-translate-placeholder="contact.messagePlaceholder" class="w-full px-4 py-3 rounded-lg theme-transition focus:outline-none min-h-[120px] transition-all" style="background-color: var(--bg-accent); color: var(--text-primary); border: 2px solid var(--border);"></textarea>
+                            <span class="error-message text-red-500 text-sm hidden"></span>
+                        </div>
+                        <div id="formSuccess" class="hidden p-4 rounded-lg font-bold text-center theme-transition" style="background-color: #10b981; color: white;">
+                            <span data-translate="contact.success">✓ Message sent successfully! We'll get back to you soon.</span>
+                        </div>
+                        <button type="submit" class="w-full btn-primary py-4 text-lg md:text-xl font-bold rounded-lg transition-all">
+                            <span data-translate="contact.sendBtn">SEND MESSAGE</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="theme-transition py-8" style="background-color: var(--bg-secondary); border-top: 2px solid var(--border);">
+        <div class="container mx-auto px-4">
+            <p class="text-lg md:text-xl font-bold theme-transition text-center" style="color: var(--accent);" data-translate="footer.text">© 2024 WHITE VAN MEAT STICKS. ALL RIGHTS RESERVED. | FRESH MEAT STICKS, DELIVERED WITH A SMILE! 🚐</p>
+        </div>
+    </footer>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                logo: "🚐 WHITE VAN MEAT STICKS 🚐",
+                nav: { home: "HOME", about: "ABOUT", menu: "MENU", contact: "CONTACT" },
+                hero: { title: "PREMIUM MEAT STICKS", subtitle: "FRESH FROM THE VAN", orderBtn: "ORDER NOW" },
+                about: { title: "ABOUT US", p1: "Welcome to White Van Meat Sticks! We're a mobile meat stick operation bringing premium quality, handcrafted meat sticks directly to your neighborhood.", p2: "Our white van roams the streets, bringing you the freshest, most flavorful meat sticks you've ever tasted. Made with care, seasoned to perfection, and served with a smile.", p3: "Look for our distinctive white van and flag us down for a taste of something special. We're always on the move, bringing quality meat sticks to communities everywhere!" },
+                menu: { title: "OUR MENU", classicBeef: { title: "CLASSIC BEEF", desc: "Traditional beef meat stick with our signature seasoning blend" }, spicyJalapeno: { title: "SPICY JALAPEÑO", desc: "Beef stick with a kick of jalapeño and special spices" }, hotSpicy: { title: "HOT & SPICY", desc: "For those who like it extra hot - not for the faint of heart!" }, cheeseStuffed: { title: "CHEESE STUFFED", desc: "Beef stick with melted cheese center - a customer favorite!" }, honeyBBQ: { title: "HONEY BBQ", desc: "Sweet and savory with our special honey BBQ glaze" }, familyPack: { title: "FAMILY PACK", desc: "10 assorted meat sticks - perfect for sharing!" } },
+                cart: { title: "YOUR ORDER 🛒", total: "TOTAL:", checkout: "CHECKOUT" },
+                checkout: { title: "COMPLETE YOUR ORDER", fullName: "FULL NAME *", phone: "PHONE NUMBER *", address: "DELIVERY ADDRESS *", city: "CITY *", zip: "ZIP CODE *", instructions: "SPECIAL INSTRUCTIONS", instructionsPlaceholder: "Any special requests? (Optional)", orderTotal: "ORDER TOTAL:", cashNote: "💰 Cash payment upon delivery", placeOrder: "PLACE ORDER 🚐" },
+                contact: { title: "FIND US", locationInfo: "LOCATION INFO", mobile: "📍 We're mobile! Look for our white van in your area", phone: "📞 Call or Text:", email: "📧 Email:", hours: "🕐 Hours:", social: "📱 Follow us on social media for daily location updates!", quote: "\"If you see the white van, flag us down! We're always happy to serve fresh meat sticks.\"", sendMessage: "SEND US A MESSAGE", name: "NAME *", phoneLabel: "PHONE *", emailLabel: "EMAIL", message: "MESSAGE *", messagePlaceholder: "Want to know where we'll be? Need a special order? Let us know!", sendBtn: "SEND MESSAGE", success: "✓ Message sent successfully! We'll get back to you soon." },
+                footer: { text: "© 2024 WHITE VAN MEAT STICKS. ALL RIGHTS RESERVED. | FRESH MEAT STICKS, DELIVERED WITH A SMILE! 🚐" }
+            },
+            fr: {
+                logo: "🚐 BÂTONNETS DE VIANDE CAMIONNETTE BLANCHE 🚐",
+                nav: { home: "ACCUEIL", about: "À PROPOS", menu: "MENU", contact: "CONTACT" },
+                hero: { title: "BÂTONNETS DE VIANDE PREMIUM", subtitle: "FRAIS DU CAMIONNETTE", orderBtn: "COMMANDER MAINTENANT" },
+                about: { title: "À PROPOS DE NOUS", p1: "Bienvenue chez White Van Meat Sticks! Nous sommes une opération mobile de bâtonnets de viande apportant des bâtonnets de viande de qualité supérieure, faits à la main, directement dans votre quartier.", p2: "Notre camionnette blanche parcourt les rues, vous apportant les bâtonnets de viande les plus frais et les plus savoureux que vous ayez jamais goûtés. Fabriqués avec soin, assaisonnés à la perfection et servis avec le sourire.", p3: "Cherchez notre camionnette blanche distinctive et arrêtez-nous pour goûter à quelque chose de spécial. Nous sommes toujours en mouvement, apportant des bâtonnets de viande de qualité partout!" },
+                menu: { title: "NOTRE MENU", classicBeef: { title: "BOEUF CLASSIQUE", desc: "Bâtonnet de viande de bœuf traditionnel avec notre mélange d'assaisonnement signature" }, spicyJalapeno: { title: "JALAPEÑO ÉPICÉ", desc: "Bâtonnet de bœuf avec un coup de jalapeño et des épices spéciales" }, hotSpicy: { title: "CH AUD ET ÉPICÉ", desc: "Pour ceux qui aiment très épicé - pas pour les âmes sensibles!" }, cheeseStuffed: { title: "FARCI AU FROMAGE", desc: "Bâtonnet de bœuf avec centre de fromage fondu - un favori des clients!" }, honeyBBQ: { title: "BBQ AU MIEL", desc: "Sucré et savoureux avec notre glaçage BBQ au miel spécial" }, familyPack: { title: "PACK FAMILLE", desc: "10 bâtonnets de viande assortis - parfait pour partager!" } },
+                cart: { title: "VOTRE COMMANDE 🛒", total: "TOTAL:", checkout: "VALIDER" },
+                checkout: { title: "COMPLÉTEZ VOTRE COMMANDE", fullName: "NOM COMPLET *", phone: "NUMÉRO DE TÉLÉPHONE *", address: "ADRESSE DE LIVRAISON *", city: "VILLE *", zip: "CODE POSTAL *", instructions: "INSTRUCTIONS SPÉCIALES", instructionsPlaceholder: "Des demandes spéciales? (Optionnel)", orderTotal: "TOTAL DE LA COMMANDE:", cashNote: "💰 Paiement en espèces à la livraison", placeOrder: "PASSER LA COMMANDE 🚐" },
+                contact: { title: "NOUS TROUVER", locationInfo: "INFORMATIONS DE LOCALISATION", mobile: "📍 Nous sommes mobiles! Cherchez notre camionnette blanche dans votre région", phone: "📞 Appeler ou Texter:", email: "📧 Email:", hours: "🕐 Heures:", social: "📱 Suivez-nous sur les réseaux sociaux pour les mises à jour de localisation quotidiennes!", quote: "\"Si vous voyez la camionnette blanche, arrêtez-nous! Nous sommes toujours heureux de servir des bâtonnets de viande frais.\"", sendMessage: "ENVOYEZ-NOUS UN MESSAGE", name: "NOM *", phoneLabel: "TÉLÉPHONE *", emailLabel: "EMAIL", message: "MESSAGE *", messagePlaceholder: "Vous voulez savoir où nous serons? Besoin d'une commande spéciale? Faites-le nous savoir!", sendBtn: "ENVOYER LE MESSAGE", success: "✓ Message envoyé avec succès! Nous vous répondrons bientôt." },
+                footer: { text: "© 2024 BÂTONNETS DE VIANDE CAMIONNETTE BLANCHE. TOUS DROITS RÉSERVÉS. | BÂTONNETS DE VIANDE FRAIS, LIVRÉS AVEC LE SOURIRE! 🚐" }
+            },
+            es: {
+                logo: "🚐 PALITOS DE CARNE CAMIONETA BLANCA 🚐",
+                nav: { home: "INICIO", about: "ACERCA DE", menu: "MENÚ", contact: "CONTACTO" },
+                hero: { title: "PALITOS DE CARNE PREMIUM", subtitle: "FRESCOS DE LA CAMIONETA", orderBtn: "ORDENAR AHORA" },
+                about: { title: "ACERCA DE NOSOTROS", p1: "¡Bienvenido a White Van Meat Sticks! Somos una operación móvil de palitos de carne que trae palitos de carne de calidad premium, hechos a mano, directamente a su vecindario.", p2: "Nuestra camioneta blanca recorre las calles, trayéndote los palitos de carne más frescos y sabrosos que hayas probado. Hechos con cuidado, sazonados a la perfección y servidos con una sonrisa.", p3: "¡Busca nuestra distintiva camioneta blanca y deténnos para probar algo especial! Siempre estamos en movimiento, llevando palitos de carne de calidad a todas partes!" },
+                menu: { title: "NUESTRO MENÚ", classicBeef: { title: "RES CLÁSICO", desc: "Palito de carne de res tradicional con nuestra mezcla de condimentos signature" }, spicyJalapeno: { title: "JALAPEÑO PICANTE", desc: "Palito de res con un toque de jalapeño y especias especiales" }, hotSpicy: { title: "PICANTE Y CALIENTE", desc: "¡Para los que les gusta muy picante - no para los débiles de corazón!" }, cheeseStuffed: { title: "RELLENO DE QUESO", desc: "Palito de res con centro de queso derretido - ¡un favorito de los clientes!" }, honeyBBQ: { title: "BBQ DE MIEL", desc: "Dulce y sabroso con nuestro glaseado especial de BBQ de miel" }, familyPack: { title: "PAQUETE FAMILIAR", desc: "¡10 palitos de carne surtidos - perfecto para compartir!" } },
+                cart: { title: "TU PEDIDO 🛒", total: "TOTAL:", checkout: "PAGAR" },
+                checkout: { title: "COMPLETA TU PEDIDO", fullName: "NOMBRE COMPLETO *", phone: "NÚMERO DE TELÉFONO *", address: "DIRECCIÓN DE ENTREGA *", city: "CIUDAD *", zip: "CÓDIGO POSTAL *", instructions: "INSTRUCCIONES ESPECIALES", instructionsPlaceholder: "¿Alguna solicitud especial? (Opcional)", orderTotal: "TOTAL DEL PEDIDO:", cashNote: "💰 Pago en efectivo al entregar", placeOrder: "REALIZAR PEDIDO 🚐" },
+                contact: { title: "ENCUÉNTRANOS", locationInfo: "INFORMACIÓN DE UBICACIÓN", mobile: "📍 ¡Somos móviles! Busca nuestra camioneta blanca en tu área", phone: "📞 Llamar o Enviar mensaje:", email: "📧 Email:", hours: "🕐 Horario:", social: "📱 ¡Síguenos en las redes sociales para actualizaciones diarias de ubicación!", quote: "\"¡Si ves la camioneta blanca, deténnos! Siempre estamos felices de servir palitos de carne frescos.\"", sendMessage: "ENVÍANOS UN MENSAJE", name: "NOMBRE *", phoneLabel: "TELÉFONO *", emailLabel: "EMAIL", message: "MENSAJE *", messagePlaceholder: "¿Quieres saber dónde estaremos? ¿Necesitas un pedido especial? ¡Déjanos saber!", sendBtn: "ENVIAR MENSAJE", success: "✓ ¡Mensaje enviado con éxito! Te responderemos pronto." },
+                footer: { text: "© 2024 PALITOS DE CARNE CAMIONETA BLANCA. TODOS LOS DERECHOS RESERVADOS. | ¡PALITOS DE CARNE FRESCOS, ENTREGADOS CON UNA SONRISA! 🚐" }
+            },
+            ar: {
+                logo: "🚐 أعواد اللحم الشاحنة البيضاء 🚐",
+                nav: { home: "الرئيسية", about: "من نحن", menu: "القائمة", contact: "اتصل بنا" },
+                hero: { title: "أعواد اللحم المميزة", subtitle: "طازجة من الشاحنة", orderBtn: "اطلب الآن" },
+                about: { title: "من نحن", p1: "مرحباً بكم في أعواد اللحم الشاحنة البيضاء! نحن عملية متنقلة لأعواد اللحم تجلب أعواد لحم عالية الجودة، مصنوعة يدوياً، مباشرة إلى حيكم.", p2: "شاحنتنا البيضاء تجوب الشوارع، تجلب لكم أعواد اللحم الأكثر طزاجة ونكهة التي تذوقتموها على الإطلاق. مصنوعة بعناية، متبلة بإتقان وخدمة بابتسامة.", p3: "ابحثوا عن شاحنتنا البيضاء المميزة وأوقفونا لتذوق شيء خاص. نحن دائماً في الحركة، نجلب أعواد لحم عالية الجودة في كل مكان!" },
+                menu: { title: "قائمتنا", classicBeef: { title: "لحم بقري كلاسيكي", desc: "عصا لحم بقري تقليدية مع مزيج التوابل الخاص بنا" }, spicyJalapeno: { title: "هالبينو حار", desc: "عصا لحم بقري مع ركلة من الهالبينو والتوابل الخاصة" }, hotSpicy: { title: "حار جداً", desc: "لأولئك الذين يحبون الحار جداً - ليس للقلوب الضعيفة!" }, cheeseStuffed: { title: "محشو بالجبن", desc: "عصا لحم بقري مع مركز جبن ذائب - مفضل العملاء!" }, honeyBBQ: { title: "شواء بالعسل", desc: "حلو ولذيذ مع صلصة الشواء بالعسل الخاصة بنا" }, familyPack: { title: "عبوة عائلية", desc: "10 أعواد لحم متنوعة - مثالية للمشاركة!" } },
+                cart: { title: "طلبك 🛒", total: "المجموع:", checkout: "الدفع" },
+                checkout: { title: "أكمل طلبك", fullName: "الاسم الكامل *", phone: "رقم الهاتف *", address: "عنوان التوصيل *", city: "المدينة *", zip: "الرمز البريدي *", instructions: "تعليمات خاصة", instructionsPlaceholder: "أي طلبات خاصة؟ (اختياري)", orderTotal: "إجمالي الطلب:", cashNote: "💰 الدفع نقداً عند التسليم", placeOrder: "تقديم الطلب 🚐" },
+                contact: { title: "اعثر علينا", locationInfo: "معلومات الموقع", mobile: "📍 نحن متنقلون! ابحث عن شاحنتنا البيضاء في منطقتك", phone: "📞 اتصل أو راسل:", email: "📧 البريد الإلكتروني:", hours: "🕐 الساعات:", social: "📱 تابعنا على وسائل التواصل الاجتماعي للحصول على تحديثات الموقع اليومية!", quote: "\"إذا رأيت الشاحنة البيضاء، أوقفنا! نحن دائماً سعداء بخدمة أعواد اللحم الطازجة.\"", sendMessage: "أرسل لنا رسالة", name: "الاسم *", phoneLabel: "الهاتف *", emailLabel: "البريد الإلكتروني", message: "الرسالة *", messagePlaceholder: "تريد أن تعرف أين سنكون؟ تحتاج طلب خاص؟ دعنا نعرف!", sendBtn: "إرسال الرسالة", success: "✓ تم إرسال الرسالة بنجاح! سنعود إليك قريباً." },
+                footer: { text: "© 2024 أعواد اللحم الشاحنة البيضاء. جميع الحقوق محفوظة. | أعواد لحم طازجة، تُقدم بابتسامة! 🚐" }
+            }
+        };
+        
+        // Theme Management
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(currentTheme);
+        });
+        
+        applyTheme(currentTheme);
+        
+        // Language Management
+        let currentLang = localStorage.getItem('language') || 'en';
+        const langSelect = document.getElementById('languageSelect');
+        
+        function getNestedValue(obj, path) {
+            return path.split('.').reduce((o, p) => o && o[p], obj);
+        }
+        
+        function translatePage(lang) {
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                const translation = getNestedValue(translations[lang], key);
+                if (translation) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translation;
+                    } else {
+                        el.textContent = translation;
+                    }
+                }
+            });
+            
+            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-translate-placeholder');
+                const translation = getNestedValue(translations[lang], key);
+                if (translation) el.placeholder = translation;
+            });
+            
+            // Set RTL for Arabic
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+            }
+            
+            localStorage.setItem('language', lang);
+        }
+        
+        langSelect.value = currentLang;
+        langSelect.addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            translatePage(currentLang);
+        });
+        
+        translatePage(currentLang);
+        
+        // Simple Particle System
+        const canvas = document.getElementById('particleCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.opacity = Math.random() * 0.3 + 0.1;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                        this.reset();
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(150, 150, 150, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            const particles = [];
+            for (let i = 0; i < 30; i++) {
+                particles.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // Order button
+        const orderButton = document.getElementById('orderButton');
+        if (orderButton) {
+            orderButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        // Simple emoji celebration
+        function createEmojiExplosion(x, y) {
+            const explosionEmojis = ['🥩', '🍖', '🌭', '🚐'];
+            for (let i = 0; i < 8; i++) {
+                const emoji = document.createElement('div');
+                emoji.textContent = explosionEmojis[Math.floor(Math.random() * explosionEmojis.length)];
+                emoji.className = 'fixed text-3xl pointer-events-none z-50';
+                emoji.style.left = x + 'px';
+                emoji.style.top = y + 'px';
+                const angle = (Math.PI * 2 * i) / 8;
+                const velocity = 80;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                document.body.appendChild(emoji);
+                let px = x, py = y;
+                const animate = () => {
+                    px += vx * 0.1;
+                    py += vy * 0.1 + 2;
+                    emoji.style.left = px + 'px';
+                    emoji.style.top = py + 'px';
+                    emoji.style.opacity = parseFloat(emoji.style.opacity || 1) - 0.02;
+                    if (parseFloat(emoji.style.opacity) > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        emoji.remove();
+                    }
+                };
+                animate();
+            }
+        }
+
+        // Shopping Cart System
+        let cart = {};
+        
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const orderCart = document.getElementById('orderCart');
+            const modalTotal = document.getElementById('modalTotal');
+            
+            cartItems.innerHTML = '';
+            let total = 0;
+            let itemCount = 0;
+            
+            for (const [item, quantity] of Object.entries(cart)) {
+                if (quantity > 0) {
+                    itemCount++;
+                    const menuCard = document.querySelector(`[data-item="${item}"]`);
+                    const price = parseFloat(menuCard.dataset.price);
+                    const emoji = menuCard.dataset.emoji;
+                    const itemTotal = price * quantity;
+                    total += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'flex justify-between items-center p-3 rounded-lg theme-transition';
+                    cartItem.style.backgroundColor = 'var(--bg-accent)';
+                    cartItem.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">${emoji}</span>
+                            <div>
+                                <div class="font-bold theme-transition" style="color: var(--text-primary);">${item}</div>
+                                <div class="text-sm theme-transition" style="color: var(--text-secondary);">$${price.toFixed(2)} × ${quantity}</div>
+                            </div>
+                        </div>
+                        <div class="text-xl font-bold theme-transition" style="color: var(--accent);">$${itemTotal.toFixed(2)}</div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                }
+            }
+            
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            modalTotal.textContent = `$${total.toFixed(2)}`;
+            
+            if (itemCount > 0) {
+                orderCart.classList.remove('hidden');
+            } else {
+                orderCart.classList.add('hidden');
+            }
+        }
+        
+        // Menu card quantity controls
+        document.querySelectorAll('.menu-card').forEach(card => {
+            const item = card.dataset.item;
+            cart[item] = 0;
+            
+            const decreaseBtn = card.querySelector('[data-action="decrease"]');
+            const increaseBtn = card.querySelector('[data-action="increase"]');
+            const quantityDisplay = card.querySelector('.quantity-display');
+            
+            decreaseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (cart[item] > 0) {
+                    cart[item]--;
+                    quantityDisplay.textContent = cart[item];
+                    updateCart();
+                    createEmojiExplosion(e.clientX, e.clientY);
+                }
+            });
+            
+            increaseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cart[item]++;
+                quantityDisplay.textContent = cart[item];
+                updateCart();
+                createEmojiExplosion(e.clientX, e.clientY);
+            });
+            
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = `scale(1.15) rotate(${Math.random() * 10 - 5}deg) translateZ(30px)`;
+            });
+        });
+        
+        // Checkout button
+        document.getElementById('checkoutBtn').addEventListener('click', () => {
+            const itemCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+            if (itemCount === 0) {
+                alert('Your cart is empty! Add some meat sticks first! 🥩');
+                return;
+            }
+            document.getElementById('checkoutModal').classList.remove('hidden');
+            document.getElementById('checkoutModal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modal
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('checkoutModal').classList.add('hidden');
+            document.getElementById('checkoutModal').classList.remove('flex');
+            document.body.style.overflow = '';
+        });
+        
+        // Close modal on outside click
+        document.getElementById('checkoutModal').addEventListener('click', (e) => {
+            if (e.target.id === 'checkoutModal') {
+                document.getElementById('checkoutModal').classList.add('hidden');
+                document.getElementById('checkoutModal').classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Parallax scrolling
+        let scrollY = 0;
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+            document.querySelectorAll('.parallax').forEach((el, index) => {
+                const speed = 0.5 + (index * 0.1);
+                el.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Form validation helper
+        function validateField(field, errorElement) {
+            const value = field.value.trim();
+            let isValid = true;
+            let errorMessage = '';
+            
+            if (field.hasAttribute('required') && !value) {
+                isValid = false;
+                errorMessage = 'This field is required';
+            } else if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid email';
+            } else if (field.type === 'tel' && value && !/^[0-9]{10,}$/.test(value.replace(/[^0-9]/g, ''))) {
+                isValid = false;
+                errorMessage = 'Please enter a valid phone number';
+            } else if (field.id === 'orderZip' && value && !/^[0-9]{5}$/.test(value)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid 5-digit ZIP code';
+            }
+            
+            if (isValid) {
+                field.classList.remove('border-red-500');
+                field.classList.add('border-yellow-400');
+                errorElement.classList.add('hidden');
+            } else {
+                field.classList.remove('border-yellow-400');
+                field.classList.add('border-red-500');
+                errorElement.textContent = errorMessage;
+                errorElement.classList.remove('hidden');
+            }
+            
+            return isValid;
+        }
+        
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameField = document.getElementById('name');
+            const phoneField = document.getElementById('phone');
+            const messageField = document.getElementById('message');
+            const emailField = document.getElementById('email');
+            
+            const nameError = nameField.parentElement.querySelector('.error-message');
+            const phoneError = phoneField.parentElement.querySelector('.error-message');
+            const messageError = messageField.parentElement.querySelector('.error-message');
+            
+            let isValid = true;
+            isValid = validateField(nameField, nameError) && isValid;
+            isValid = validateField(phoneField, phoneError) && isValid;
+            isValid = validateField(messageField, messageError) && isValid;
+            if (emailField.value) {
+                isValid = validateField(emailField, emailField.parentElement.querySelector('.error-message')) && isValid;
+            }
+            
+            if (isValid) {
+                createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                document.getElementById('formSuccess').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('formSuccess').classList.add('hidden');
+                }, 5000);
+                this.reset();
+            }
+        });
+        
+        // Order form submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fields = ['orderName', 'orderPhone', 'orderAddress', 'orderCity', 'orderZip'];
+            let isValid = true;
+            
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const errorElement = field.parentElement.querySelector('.error-message');
+                if (!validateField(field, errorElement)) {
+                    isValid = false;
+                }
+            });
+            
+            if (isValid) {
+                const itemCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+                if (itemCount === 0) {
+                    alert('Your cart is empty! Add some meat sticks first! 🥩');
+                    return;
+                }
+                
+                createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                alert(`ORDER PLACED! 🚐\n\nThank you ${document.getElementById('orderName').value}!\n\nWe'll deliver your order to:\n${document.getElementById('orderAddress').value}\n\nTotal: ${document.getElementById('modalTotal').textContent}\n\nOur white van will arrive soon! (Cash payment upon delivery)`);
+                
+                // Reset cart
+                Object.keys(cart).forEach(item => {
+                    cart[item] = 0;
+                    const menuCard = document.querySelector(`[data-item="${item}"]`);
+                    menuCard.querySelector('.quantity-display').textContent = '0';
+                });
+                updateCart();
+                
+                document.getElementById('checkoutModal').classList.add('hidden');
+                document.getElementById('checkoutModal').classList.remove('flex');
+                document.body.style.overflow = '';
+                this.reset();
+            }
+        });
+        
+        // Real-time form validation
+        document.querySelectorAll('#contactForm input, #contactForm textarea, #orderForm input').forEach(field => {
+            field.addEventListener('blur', () => {
+                const errorElement = field.parentElement.querySelector('.error-message');
+                if (errorElement) {
+                    validateField(field, errorElement);
+                }
+            });
+            
+            field.addEventListener('input', () => {
+                if (field.classList.contains('border-red-500')) {
+                    const errorElement = field.parentElement.querySelector('.error-message');
+                    if (errorElement) {
+                        validateField(field, errorElement);
+                    }
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
