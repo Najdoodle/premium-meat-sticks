@@ -752,35 +752,39 @@
         }
         
         // Contact form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nameField = document.getElementById('name');
-            const phoneField = document.getElementById('phone');
-            const messageField = document.getElementById('message');
-            const emailField = document.getElementById('email');
-            
-            const nameError = nameField.parentElement.querySelector('.error-message');
-            const phoneError = phoneField.parentElement.querySelector('.error-message');
-            const messageError = messageField.parentElement.querySelector('.error-message');
-            
-            let isValid = true;
-            isValid = validateField(nameField, nameError) && isValid;
-            isValid = validateField(phoneField, phoneError) && isValid;
-            isValid = validateField(messageField, messageError) && isValid;
-            if (emailField.value) {
-                isValid = validateField(emailField, emailField.parentElement.querySelector('.error-message')) && isValid;
-            }
-            
-            if (isValid) {
-                // Show success message
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                const nameField = document.getElementById('name');
+                const phoneField = document.getElementById('phone');
+                const messageField = document.getElementById('message');
+                const emailField = document.getElementById('email');
+                
+                const nameError = nameField.parentElement.querySelector('.error-message');
+                const phoneError = phoneField.parentElement.querySelector('.error-message');
+                const messageError = messageField.parentElement.querySelector('.error-message');
+                
+                let isValid = true;
+                isValid = validateField(nameField, nameError) && isValid;
+                isValid = validateField(phoneField, phoneError) && isValid;
+                isValid = validateField(messageField, messageError) && isValid;
+                if (emailField.value) {
+                    isValid = validateField(emailField, emailField.parentElement.querySelector('.error-message')) && isValid;
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // If validation passes, show success message
                 document.getElementById('formSuccess').classList.remove('hidden');
                 createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
                 
-                // Submit to FormSubmit
-                this.submit();
-            }
-        });
+                // Form will submit to FormSubmit - allow it to proceed
+                // FormSubmit will handle the submission and redirect back via _next
+            });
+        }
         
         // Order form submission
         document.getElementById('orderForm').addEventListener('submit', function(e) {
